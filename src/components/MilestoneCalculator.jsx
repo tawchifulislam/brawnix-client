@@ -79,7 +79,7 @@ const MilestoneCalculator = () => {
                     placeholder="e.g. 74"
                     value={weight}
                     onChange={e => setWeight(e.target.value)}
-                    className="w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3.5 text-base font-bold text-white dark:text-white placeholder-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 focus:outline-none transition-all shadow-sm"
+                    className="w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3.5 text-base font-bold text-[#00A896] dark:text-white placeholder-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 focus:outline-none transition-all shadow-sm"
                     required
                   />
                 </div>
@@ -94,7 +94,7 @@ const MilestoneCalculator = () => {
                     placeholder="e.g. 176"
                     value={height}
                     onChange={e => setHeight(e.target.value)}
-                    className="w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3.5 text-base font-bold text-white dark:text-white placeholder-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 focus:outline-none transition-all shadow-sm"
+                    className="w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3.5 text-base font-bold text-[#00A896] dark:text-white placeholder-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 focus:outline-none transition-all shadow-sm"
                     required
                   />
                 </div>

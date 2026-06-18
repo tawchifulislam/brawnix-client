@@ -2,7 +2,10 @@
 
 import React, { useState } from 'react';
 import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 import Logo from './Logo';
+import ThemeToggler from './ThemeToggler';
+import { Bars, Xmark } from '@gravity-ui/icons';
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
@@ -26,7 +29,7 @@ const Navbar = () => {
               const isActive = pathname === link.path;
 
               return (
-                <a
+                <Link
                   key={index}
                   href={link.path}
                   className={`text-sm font-bold relative py-1 transition-colors duration-200
@@ -37,16 +40,16 @@ const Navbar = () => {
                     }`}
                 >
                   {link.name}
-
                   {isActive && (
-                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-orange-600 dark:bg-orange-400 rounded-full animate-fadeIn" />
+                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-orange-600 dark:bg-orange-400 rounded-full" />
                   )}
-                </a>
+                </Link>
               );
             })}
           </div>
 
           <div className="hidden md:flex items-center gap-4">
+            <ThemeToggler />
             <button className="text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-orange-600 dark:hover:text-orange-400 transition-colors duration-200">
               Login
             </button>
@@ -55,33 +58,17 @@ const Navbar = () => {
             </button>
           </div>
 
-          <div className="flex md:hidden">
+          <div className="flex md:hidden items-center gap-3">
+            <ThemeToggler />
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="inline-flex items-center justify-center rounded-lg p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
+              className="inline-flex items-center justify-center rounded-lg p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none transition-colors duration-200"
             >
-              <svg
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                {isMenuOpen ? (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                ) : (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                )}
-              </svg>
+              {isMenuOpen ? (
+                <Xmark style={{ fontSize: '20px' }} />
+              ) : (
+                <Bars style={{ fontSize: '20px' }} />
+              )}
             </button>
           </div>
         </div>
@@ -94,9 +81,10 @@ const Navbar = () => {
               const isActive = pathname === link.path;
 
               return (
-                <a
+                <Link
                   key={index}
                   href={link.path}
+                  onClick={() => setIsMenuOpen(false)}
                   className={`block text-base font-bold px-3 py-2 rounded-xl transition-all
                     ${
                       isActive
@@ -105,13 +93,13 @@ const Navbar = () => {
                     }`}
                 >
                   {link.name}
-                </a>
+                </Link>
               );
             })}
           </div>
 
           <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex flex-col gap-3">
-            <button className="w-full text-center py-2.5 text-sm font-bold text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800">
+            <button className="w-full text-center py-2.5 text-sm font-bold text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-xl">
               Login
             </button>
             <button className="w-full text-center py-2.5 text-sm font-bold text-white bg-orange-600 dark:bg-orange-500 rounded-xl shadow-md">
