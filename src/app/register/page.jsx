@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { useAuth } from '../context/AuthContext';
+import { authClient } from '@/lib/auth-client';
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -17,7 +17,6 @@ const RegisterPage = () => {
 
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { setUser } = useAuth();
 
   const handleChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -35,34 +34,31 @@ const RegisterPage = () => {
       );
     }
 
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData),
+    await authClient.signUp.email({
+      email: formData.email,
+      password: formData.password,
+      name: formData.name,
+      image: formData.image,
+      fetchOptions: {
+        onRequest: () => {
+          setLoading(true);
         },
-      );
-
-      const data = await response.json();
-
-      if (response.ok) {
-        toast.success(data.message || 'Registration successful!');
-
-        setFormData({ name: '', email: '', image: '', password: '' });
-
-        window.location.replace('/');
-      } else {
-        toast.error(data.message || 'Registration failed.');
-      }
-    } catch (error) {
-      toast.error('Something went wrong. Please check your server.');
-    } finally {
-      setLoading(false);
-    }
+        onSuccess: () => {
+          toast.success('Registration successful! Welcome to Brawnix');
+          setFormData({ name: '', email: '', image: '', password: '' });
+          setLoading(false);
+          setTimeout(() => {
+            window.location.replace('/');
+          }, 800);
+        },
+        onError: ctx => {
+          toast.error(
+            ctx.error.message || 'Registration failed. Please try again.',
+          );
+          setLoading(false);
+        },
+      },
+    });
   };
 
   return (

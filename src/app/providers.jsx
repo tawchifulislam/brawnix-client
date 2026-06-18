@@ -1,7 +1,6 @@
 'use client';
 
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
-import { AuthProvider } from './context/AuthContext';
 
 export function Providers({ children }) {
   return (
@@ -11,7 +10,7 @@ export function Providers({ children }) {
       enableSystem={false}
       disableTransitionOnChange
     >
-      <AuthProvider>{children}</AuthProvider>
+      {children}
     </NextThemesProvider>
   );
 }

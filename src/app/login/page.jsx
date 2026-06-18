@@ -4,8 +4,9 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import toast from 'react-hot-toast';
 import Image from 'next/image';
+import toast from 'react-hot-toast';
+import { authClient } from '@/lib/auth-client';
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -20,38 +21,39 @@ const LoginPage = () => {
     e.preventDefault();
     setLoading(true);
 
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          credentials: 'include',
-          body: JSON.stringify(formData),
+    await authClient.signIn.email({
+      email: formData.email,
+      password: formData.password,
+      fetchOptions: {
+        onRequest: () => {
+          setLoading(true);
         },
-      );
+        onSuccess: () => {
+          toast.success('Welcome back!');
+          setFormData({ email: '', password: '' });
+          setLoading(false);
 
-      const data = await response.json();
-
-      if (response.ok) {
-        toast.success(data.message || 'Welcome back!');
-        setFormData({ email: '', password: '' });
-
-        window.location.replace('/');
-      } else {
-        toast.error(data.message || 'Invalid email or password.');
-      }
-    } catch (error) {
-      toast.error('Connection failed. Please check your backend server.');
-    } finally {
-      setLoading(false);
-    }
+          setTimeout(() => {
+            window.location.replace('/');
+          }, 800);
+        },
+        onError: ctx => {
+          toast.error(ctx.error.message || 'Invalid email or password.');
+          setLoading(false);
+        },
+      },
+    });
   };
 
-  const handleGoogleLogin = () => {
-    toast.error('Google login is being configured with Better Auth.');
+  const handleGoogleLogin = async () => {
+    try {
+      await authClient.signIn.social({
+        provider: 'google',
+        callbackURL: '/',
+      });
+    } catch (error) {
+      toast.error('Google authentication failed.');
+    }
   };
 
   return (
@@ -66,7 +68,7 @@ const LoginPage = () => {
 
         <div className="text-center mb-8">
           <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white font-sans">
-            Login to Brawnix
+            Sign In to Brawnix
           </h2>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1.5">
             Welcome back! Enter your details to access your fitness platform.
@@ -138,7 +140,7 @@ const LoginPage = () => {
             height={20}
             className="w-5 h-5 object-contain"
           />
-          <span>Login with Google Account</span>
+          <span>Google Account</span>
         </motion.button>
 
         <p className="mt-6 text-center text-xs text-slate-500 dark:text-slate-400">
