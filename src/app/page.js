@@ -1,6 +1,7 @@
 import Banner from '@/components/Banner';
 import Ecosystem from '@/components/Ecosystem';
 import FeaturedClasses from '@/components/FeaturedClasses';
+import LatestForum from '@/components/LatestForum';
 import MilestoneCalculator from '@/components/MilestoneCalculator';
 
 export default function Home() {
@@ -9,6 +10,7 @@ export default function Home() {
       <Banner />
       <FeaturedClasses />
       <Ecosystem />
+      <LatestForum />
       <MilestoneCalculator />
     </div>
   );
