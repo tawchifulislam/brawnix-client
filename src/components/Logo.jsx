@@ -1,9 +1,13 @@
 import React from 'react';
+import Link from 'next/link';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
 export const Logo = ({ size = 36, showText = true }) => {
   return (
-    <div className="flex items-center gap-3 select-none cursor-pointer group">
+    <Link
+      href="/"
+      className="flex items-center gap-3 select-none cursor-pointer group"
+    >
       <div
         style={{ width: size, height: size }}
         className="relative flex items-center justify-center rounded-xl bg-orange-500/10 dark:bg-orange-500/20 p-1 transition-all duration-300 group-hover:scale-105 group-hover:shadow-[0_0_20px_rgba(249,115,22,0.3)]"
@@ -31,7 +35,7 @@ export const Logo = ({ size = 36, showText = true }) => {
           </span>
         </div>
       )}
-    </div>
+    </Link>
   );
 };
 
