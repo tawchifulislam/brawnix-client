@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import { Flame } from '@gravity-ui/icons';
 
 const Banner = () => {
   const containerVariants = {
@@ -49,7 +50,7 @@ const Banner = () => {
               variants={textVariants}
               className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-orange-500/10 dark:bg-orange-500/20 px-4 py-1.5 text-xs font-extrabold uppercase tracking-widest text-orange-600 dark:text-orange-400"
             >
-              🔥 Push Your Limits
+              <Flame /> Push Your Limits
             </motion.span>
 
             <motion.h1
