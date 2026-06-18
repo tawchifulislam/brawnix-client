@@ -47,9 +47,7 @@ const RegisterPage = () => {
           toast.success('Registration successful! Welcome to Brawnix');
           setFormData({ name: '', email: '', image: '', password: '' });
           setLoading(false);
-          setTimeout(() => {
-            window.location.replace('/');
-          }, 800);
+          router.push('/');
         },
         onError: ctx => {
           toast.error(

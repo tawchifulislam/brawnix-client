@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import Logo from './Logo';
@@ -13,6 +13,7 @@ import toast from 'react-hot-toast';
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
 
   const { data: session, isPending } = authClient.useSession();
   const user = session?.user;
@@ -22,10 +23,7 @@ const Navbar = () => {
       fetchOptions: {
         onSuccess: () => {
           toast.success('Logged out successfully!');
-
-          setTimeout(() => {
-            window.location.replace('/');
-          }, 800);
+          router.push('/');
         },
         onError: () => {
           toast.error('Logout failed. Please try again.');

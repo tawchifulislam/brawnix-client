@@ -32,10 +32,7 @@ const LoginPage = () => {
           toast.success('Welcome back!');
           setFormData({ email: '', password: '' });
           setLoading(false);
-
-          setTimeout(() => {
-            window.location.replace('/');
-          }, 800);
+          router.push('/');
         },
         onError: ctx => {
           toast.error(ctx.error.message || 'Invalid email or password.');
