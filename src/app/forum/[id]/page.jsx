@@ -2,6 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { ArrowChevronLeft } from '@gravity-ui/icons';
 
 async function getForumDetails(id) {
   const response = await fetch(
@@ -26,9 +27,9 @@ export default async function ForumDetailsPage({ params }) {
         <div className="mb-6">
           <Link
             href="/forum"
-            className="text-xs font-black uppercase tracking-wider text-orange-600 dark:text-orange-400 hover:underline"
+            className="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-900 dark:hover:bg-slate-800 text-orange-600 dark:text-orange-400 border border-slate-200/60 dark:border-slate-800 transition-all"
           >
-            ← Back to Community Forum
+            <ArrowChevronLeft style={{ fontSize: '16px' }} />
           </Link>
         </div>
 

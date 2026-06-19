@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import Logo from './Logo';
@@ -15,6 +15,7 @@ const Navbar = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const pathname = usePathname();
   const dropdownRef = useRef(null);
+  const router = useRouter();
 
   const { data: session, isPending } = authClient.useSession();
   const user = session?.user;
@@ -36,9 +37,7 @@ const Navbar = () => {
           toast.success('Logged out successfully!');
           setIsProfileOpen(false);
           setIsMenuOpen(false);
-          setTimeout(() => {
-            window.location.replace('/');
-          }, 1000);
+          router.push('/');
         },
         onError: () => {
           toast.error('Logout failed.');

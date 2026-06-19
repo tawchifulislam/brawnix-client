@@ -2,7 +2,8 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { SealCheck } from '@gravity-ui/icons';
+import { ArrowChevronLeft, SealCheck } from '@gravity-ui/icons';
+import FavoriteButton from '@/components/FavoriteButton';
 
 async function getClassDetails(id) {
   const response = await fetch(
@@ -27,16 +28,19 @@ export default async function ClassDetailsPage({ params }) {
         <div className="mb-6">
           <Link
             href="/classes"
-            className="text-xs font-black uppercase tracking-wider text-orange-600 dark:text-orange-400 hover:underline"
+            className="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-900 dark:hover:bg-slate-800 text-orange-600 dark:text-orange-400 border border-slate-200/60 dark:border-slate-800 transition-all"
           >
-            ← Back to All Classes
+            <ArrowChevronLeft style={{ fontSize: '16px' }} />
           </Link>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           <div className="lg:col-span-7 w-full aspect-16/10 sm:aspect-video rounded-3xl overflow-hidden relative bg-slate-100 dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 shadow-lg">
             <Image
-              src={classData.image || 'https://unsplash.com'}
+              src={
+                classData.image ||
+                'https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80'
+              }
               alt={classData.className}
               fill
               sizes="(max-w-5xl) 100vw"
@@ -74,8 +78,9 @@ export default async function ClassDetailsPage({ params }) {
                 <span className="block font-bold text-slate-400 uppercase tracking-wider">
                   Enrolled Members
                 </span>
-                <span className="block font-black text-orange-600 dark:text-orange-400 text-sm mt-0.5">
-                  <SealCheck /> {classData.bookingCount || 0} Booked
+                <span className="flex items-center gap-1.5 font-black text-orange-600 dark:text-orange-400 text-sm mt-0.5">
+                  <SealCheck style={{ fontSize: '16px' }} />
+                  <span>{classData.bookingCount || 0} Booked</span>
                 </span>
               </div>
             </div>
@@ -89,11 +94,15 @@ export default async function ClassDetailsPage({ params }) {
               </span>
             </div>
 
-            <Link href={`/dashboard/payment?classId=${classData._id}`}>
-              <button className="w-full mt-6 rounded-2xl bg-orange-600 hover:bg-orange-700 dark:bg-orange-500 dark:hover:bg-orange-600 py-4 text-sm font-black text-white shadow-xl shadow-orange-500/10 transition-all cursor-pointer">
-                Book This Session Now
-              </button>
-            </Link>
+            <div className="flex flex-col w-full mt-6">
+              <Link href={`/dashboard/payment?classId=${classData._id}`}>
+                <button className="w-full rounded-2xl bg-orange-600 hover:bg-orange-700 dark:bg-orange-500 dark:hover:bg-orange-600 py-4 text-sm font-black text-white shadow-xl shadow-orange-500/10 transition-all cursor-pointer">
+                  Book This Session Now
+                </button>
+              </Link>
+
+              <FavoriteButton classData={classData} />
+            </div>
           </div>
         </div>
 
