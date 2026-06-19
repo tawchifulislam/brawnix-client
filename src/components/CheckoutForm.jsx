@@ -100,9 +100,9 @@ export default function CheckoutForm({ classData }) {
         );
 
         if (response.ok) {
-          toast.success('Payment & Booking Successful! 🏋️‍♂️🎉');
+          toast.success('Payment & Booking Successful!');
           setTimeout(() => {
-            window.location.replace('/dashboard/my-bookings');
+            window.location.replace('/dashboard');
           }, 1500);
         }
       } catch (err) {

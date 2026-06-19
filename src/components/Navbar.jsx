@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import React, { useState, useEffect, useRef } from 'react';
+import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import Logo from './Logo';
@@ -12,21 +12,36 @@ import toast from 'react-hot-toast';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const pathname = usePathname();
-  const router = useRouter();
+  const dropdownRef = useRef(null);
 
   const { data: session, isPending } = authClient.useSession();
   const user = session?.user;
+
+  useEffect(() => {
+    const handleClickOutside = event => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsProfileOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleLogout = async () => {
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
           toast.success('Logged out successfully!');
-          router.push('/');
+          setIsProfileOpen(false);
+          setIsMenuOpen(false);
+          setTimeout(() => {
+            window.location.replace('/');
+          }, 1000);
         },
         onError: () => {
-          toast.error('Logout failed. Please try again.');
+          toast.error('Logout failed.');
         },
       },
     });
@@ -49,17 +64,12 @@ const Navbar = () => {
           <div className="hidden md:flex items-center gap-8">
             {navLinks.map((link, index) => {
               const isActive = pathname === link.path;
-
               return (
                 <Link
                   key={index}
                   href={link.path}
                   className={`text-sm font-bold relative py-1 transition-colors duration-200
-                    ${
-                      isActive
-                        ? 'text-orange-600 dark:text-orange-400'
-                        : 'text-slate-600 dark:text-slate-300 hover:text-orange-600 dark:hover:text-orange-400'
-                    }`}
+                    ${isActive ? 'text-orange-600 dark:text-orange-400' : 'text-slate-600 dark:text-slate-300 hover:text-orange-600 dark:hover:text-orange-400'}`}
                 >
                   {link.name}
                   {isActive && (
@@ -75,20 +85,49 @@ const Navbar = () => {
 
             {!isPending &&
               (user ? (
-                <div className="flex items-center gap-4">
-                  <Image
-                    src={user.image || 'https://unsplash.com'}
-                    alt={user.name || 'User Avatar'}
-                    width={36}
-                    height={36}
-                    className="w-9 h-9 rounded-full object-cover border-2 border-orange-500/30 shadow-inner"
-                  />
+                <div className="relative" ref={dropdownRef}>
                   <button
-                    onClick={handleLogout}
-                    className="text-sm font-bold text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 transition-colors duration-200 cursor-pointer"
+                    onClick={() => setIsProfileOpen(!isProfileOpen)}
+                    className="flex items-center focus:outline-none cursor-pointer group"
                   >
-                    Logout
+                    <Image
+                      src={user.image || 'https://unsplash.com'}
+                      alt="User Avatar"
+                      width={36}
+                      height={36}
+                      className="w-9 h-9 rounded-full object-cover border-2 border-orange-500/30 group-hover:border-orange-500 shadow-inner transition-all duration-300"
+                    />
                   </button>
+
+                  {isProfileOpen && (
+                    <div className="absolute right-0 mt-3 w-56 rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-950 p-2 shadow-2xl animate-fadeIn z-50">
+                      <div className="px-4 py-3 bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-900 rounded-xl mb-1.5 flex flex-col justify-center">
+                        <span className="text-xs font-black text-slate-950 dark:text-white truncate">
+                          {user.name}
+                        </span>
+                        <span className="text-[10px] font-bold text-slate-400 truncate mt-0.5">
+                          {user.email}
+                        </span>
+                      </div>
+
+                      <Link
+                        href="/dashboard"
+                        onClick={() => setIsProfileOpen(false)}
+                        className="flex items-center w-full px-4 py-2.5 text-xs font-extrabold text-slate-700 dark:text-slate-300 hover:bg-orange-500/10 hover:text-orange-600 dark:hover:text-orange-400 rounded-xl transition-all"
+                      >
+                        Dashboard
+                      </Link>
+
+                      <div className="my-1 border-t border-slate-100 dark:border-slate-900" />
+
+                      <button
+                        onClick={handleLogout}
+                        className="flex items-center w-full px-4 py-2.5 text-xs font-black text-rose-600 dark:text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all cursor-pointer"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="flex items-center gap-4">
@@ -128,18 +167,13 @@ const Navbar = () => {
           <div className="space-y-1">
             {navLinks.map((link, index) => {
               const isActive = pathname === link.path;
-
               return (
                 <Link
                   key={index}
                   href={link.path}
                   onClick={() => setIsMenuOpen(false)}
                   className={`block text-base font-bold px-3 py-2 rounded-xl transition-all
-                    ${
-                      isActive
-                        ? 'text-orange-600 dark:text-orange-400 bg-orange-500/10 dark:bg-orange-500/20'
-                        : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
-                    }`}
+                    ${isActive ? 'text-orange-600 dark:text-orange-400 bg-orange-500/10 dark:bg-orange-500/20' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'}`}
                 >
                   {link.name}
                 </Link>
@@ -150,8 +184,8 @@ const Navbar = () => {
           <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex flex-col gap-3">
             {!isPending &&
               (user ? (
-                <div className="flex items-center justify-between w-full px-3 py-2 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800">
-                  <div className="flex items-center gap-3">
+                <div className="flex flex-col gap-2 w-full px-3 py-3 bg-slate-50 dark:bg-slate-950 rounded-xl border border-slate-100 dark:border-slate-900">
+                  <div className="flex items-center gap-3 mb-2">
                     <Image
                       src={user.image || 'https://unsplash.com'}
                       alt="User Profile"
@@ -163,12 +197,16 @@ const Navbar = () => {
                       {user.name}
                     </span>
                   </div>
+                  <Link
+                    href="/dashboard"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="text-xs font-bold text-center py-2.5 bg-orange-500/10 text-orange-600 dark:text-orange-400 rounded-xl"
+                  >
+                    Dashboard
+                  </Link>
                   <button
-                    onClick={() => {
-                      handleLogout();
-                      setIsMenuOpen(false);
-                    }}
-                    className="text-sm font-bold text-rose-600 dark:text-rose-400 cursor-pointer"
+                    onClick={handleLogout}
+                    className="text-xs font-black text-center py-2.5 text-rose-600 bg-rose-500/10 rounded-xl cursor-pointer"
                   >
                     Logout
                   </button>
@@ -182,8 +220,12 @@ const Navbar = () => {
                   >
                     Login
                   </Link>
-                  <Link href="/register" onClick={() => setIsMenuOpen(false)}>
-                    <button className="w-full text-center py-2.5 text-sm font-bold text-white bg-orange-600 dark:bg-orange-500 rounded-xl shadow-md">
+                  <Link
+                    href="/register"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="w-full"
+                  >
+                    <button className="w-full rounded-xl bg-orange-600 hover:bg-orange-700 dark:bg-orange-500 dark:hover:bg-orange-600 py-2.5 text-sm font-bold text-white shadow-md shadow-orange-500/10 transition-all duration-200 cursor-pointer">
                       Sign Up
                     </button>
                   </Link>
