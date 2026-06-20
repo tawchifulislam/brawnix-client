@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
 import { ArrowChevronLeft, SealCheck } from '@gravity-ui/icons';
 import FavoriteButton from '@/components/FavoriteButton';
+import BookNowButton from '@/components/BookNowButton';
 
 async function getClassDetails(id) {
   const nextHeaders = await headers();
@@ -104,11 +105,7 @@ export default async function ClassDetailsPage({ params }) {
             </div>
 
             <div className="flex flex-col w-full mt-6">
-              <Link href={`/dashboard/payment?classId=${classData._id}`}>
-                <button className="w-full rounded-2xl bg-orange-600 hover:bg-orange-700 dark:bg-orange-500 dark:hover:bg-orange-600 py-4 text-sm font-black text-white shadow-xl shadow-orange-500/10 transition-all cursor-pointer">
-                  Book Now
-                </button>
-              </Link>
+              <BookNowButton classData={classData} />
               <FavoriteButton classData={classData} />
             </div>
           </div>

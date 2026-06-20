@@ -6,6 +6,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import CheckoutForm from '@/components/CheckoutForm';
 import { authClient } from '@/lib/auth-client';
+import Loading from '@/app/loading';
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
@@ -20,7 +21,9 @@ export default function PaymentPage() {
 
   useEffect(() => {
     if (classId) {
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/classes/${classId}`)
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/classes/${classId}`, {
+        credentials: 'include',
+      })
         .then(res => res.json())
         .then(data => {
           setClassData(data);
@@ -31,11 +34,7 @@ export default function PaymentPage() {
   }, [classId]);
 
   if (isPending || fetching) {
-    return (
-      <div className="w-full text-center py-24 text-xs font-extrabold uppercase tracking-widest text-orange-600 dark:text-orange-400 animate-pulse">
-        Securing Payment Space...
-      </div>
-    );
+    return <Loading />;
   }
 
   if (!session?.user) {

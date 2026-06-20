@@ -17,8 +17,12 @@ export default function CheckoutForm({ classData }) {
     if (classData && classData.price) {
       fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/create-payment-intent`, {
         method: 'POST',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ price: classData.price }),
+        body: JSON.stringify({
+          price: classData.price,
+          userEmail: user?.email,
+        }),
       })
         .then(res => res.json())
         .then(data => {
@@ -30,7 +34,7 @@ export default function CheckoutForm({ classData }) {
         })
         .catch(err => console.error('Payment intent error:', err));
     }
-  }, [classData]);
+  }, [classData, user]);
 
   const handleSubmit = async e => {
     e.preventDefault();
