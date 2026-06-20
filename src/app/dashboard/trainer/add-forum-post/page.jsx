@@ -106,7 +106,7 @@ export default function AddForumPostPage() {
           <textarea
             name="description"
             required
-            rows={6}
+            rows={8}
             value={formData.description}
             onChange={handleChange}
             placeholder="Write your full post here..."
