@@ -215,7 +215,7 @@ export default function AddClassPage() {
           <textarea
             name="description"
             required
-            rows={4}
+            rows={7}
             value={formData.description}
             onChange={handleChange}
             placeholder="Describe what this class covers..."
