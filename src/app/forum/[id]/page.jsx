@@ -1,14 +1,24 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { redirect } from 'next/navigation';
+import { headers } from 'next/headers';
 import { ArrowChevronLeft } from '@gravity-ui/icons';
 
 async function getForumDetails(id) {
+  const nextHeaders = await headers();
+  const cookieHeader = nextHeaders.get('cookie') || '';
+
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/api/forum/${id}`,
-    { cache: 'no-store' },
+    {
+      cache: 'no-store',
+      headers: {
+        Cookie: cookieHeader,
+      },
+    },
   );
+
   if (!response.ok) return null;
   return response.json();
 }
@@ -18,7 +28,7 @@ export default async function ForumDetailsPage({ params }) {
   const post = await getForumDetails(resolvedParams.id);
 
   if (!post) {
-    notFound();
+    redirect('/login');
   }
 
   return (
@@ -60,7 +70,7 @@ export default async function ForumDetailsPage({ params }) {
 
         <div className="w-full aspect-16/10 sm:aspect-video rounded-3xl overflow-hidden relative bg-slate-100 dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 shadow-md mb-8">
           <Image
-            src={post.image || 'https://unsplash.com'}
+            src={post.image || 'https://images.unsplash.com'}
             alt={post.title}
             fill
             sizes="(max-w-3xl) 100vw"

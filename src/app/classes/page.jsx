@@ -23,8 +23,8 @@ export default async function AllClassesPage({ searchParams }) {
   const classes = await getClasses(resolvedSearchParams);
 
   return (
-    <section className="w-full bg-white dark:bg-slate-900 min-h-screen py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
-      <div className="mx-auto max-w-7xl">
+    <section className="w-full bg-white dark:bg-slate-900 min-h-screen py-12 transition-colors duration-300">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-12">
           <h1 className="text-3xl font-black tracking-tight text-slate-950 dark:text-white sm:text-4xl md:text-5xl font-sans">
             Explore All Classes

@@ -1,15 +1,24 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { redirect } from 'next/navigation';
+import { headers } from 'next/headers';
 import { ArrowChevronLeft, SealCheck } from '@gravity-ui/icons';
 import FavoriteButton from '@/components/FavoriteButton';
 
 async function getClassDetails(id) {
+  const nextHeaders = await headers();
+  const cookieHeader = nextHeaders.get('cookie') || '';
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/api/classes/${id}`,
-    { cache: 'no-store' },
+    {
+      cache: 'no-store',
+      headers: {
+        Cookie: cookieHeader,
+      },
+    },
   );
+
   if (!response.ok) return null;
   return response.json();
 }
@@ -19,7 +28,7 @@ export default async function ClassDetailsPage({ params }) {
   const classData = await getClassDetails(resolvedParams.id);
 
   if (!classData) {
-    notFound();
+    redirect('/login');
   }
 
   return (
@@ -97,10 +106,9 @@ export default async function ClassDetailsPage({ params }) {
             <div className="flex flex-col w-full mt-6">
               <Link href={`/dashboard/payment?classId=${classData._id}`}>
                 <button className="w-full rounded-2xl bg-orange-600 hover:bg-orange-700 dark:bg-orange-500 dark:hover:bg-orange-600 py-4 text-sm font-black text-white shadow-xl shadow-orange-500/10 transition-all cursor-pointer">
-                  Book This Session Now
+                  Book Now
                 </button>
               </Link>
-
               <FavoriteButton classData={classData} />
             </div>
           </div>
@@ -112,7 +120,7 @@ export default async function ClassDetailsPage({ params }) {
           </h2>
           <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
             {classData.description ||
-              'No description provided for this premium session. Please check back later or contact support for full module guidelines.'}
+              'No description provided for this premium session.'}
           </p>
         </div>
       </div>
