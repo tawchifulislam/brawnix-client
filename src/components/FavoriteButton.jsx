@@ -30,6 +30,7 @@ export default function FavoriteButton({ classData }) {
         `${process.env.NEXT_PUBLIC_API_URL}/api/favorites`,
         {
           method: 'POST',
+          credentials: 'include',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(favoritePayload),
         },

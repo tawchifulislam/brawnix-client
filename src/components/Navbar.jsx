@@ -4,11 +4,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import Logo from './Logo';
-import ThemeToggler from './ThemeToggler';
+
 import { authClient } from '@/lib/auth-client';
 import { Bars, Xmark } from '@gravity-ui/icons';
 import toast from 'react-hot-toast';
+import Logo from './Logo';
+import ThemeToggler from './ThemeToggler';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

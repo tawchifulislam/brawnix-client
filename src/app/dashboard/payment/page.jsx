@@ -4,9 +4,9 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
-import CheckoutForm from '@/components/CheckoutForm';
 import { authClient } from '@/lib/auth-client';
 import Loading from '@/app/loading';
+import CheckoutForm from '@/components/Dashboard/CheckoutForm';
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
@@ -50,7 +50,7 @@ export default function PaymentPage() {
             Complete Payment
           </h1>
           <p className="text-xs text-slate-500 mt-1">
-            Review your fitness session slot details and insert your test card
+            Review your fitness session slot details and insert your card
             details.
           </p>
         </div>

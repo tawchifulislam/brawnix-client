@@ -1,8 +1,8 @@
-import Banner from '@/components/Banner';
-import Ecosystem from '@/components/Ecosystem';
-import FeaturedClasses from '@/components/FeaturedClasses';
-import LatestForum from '@/components/LatestForum';
-import MilestoneCalculator from '@/components/MilestoneCalculator';
+import Banner from '@/components/Home/Banner';
+import Ecosystem from '@/components/Home/Ecosystem';
+import FeaturedClasses from '@/components/Home/FeaturedClasses';
+import LatestForum from '@/components/Home/LatestForum';
+import MilestoneCalculator from '@/components/Home/MilestoneCalculator';
 
 export default function Home() {
   return (

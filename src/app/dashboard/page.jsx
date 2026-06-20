@@ -28,6 +28,7 @@ export default function MyDashboardPage() {
     if (user?.email) {
       fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/my-bookings?email=${user.email}`,
+        { credentials: 'include' },
       )
         .then(res => res.json())
         .then(data => {
@@ -45,6 +46,7 @@ export default function MyDashboardPage() {
     if (user?.email) {
       fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/favorites?email=${user.email}`,
+        { credentials: 'include' },
       )
         .then(res => res.json())
         .then(data => {
@@ -65,6 +67,7 @@ export default function MyDashboardPage() {
           `${process.env.NEXT_PUBLIC_API_URL}/api/bookings/${id}`,
           {
             method: 'DELETE',
+            credentials: 'include',
           },
         );
         const data = await response.json();
@@ -87,6 +90,7 @@ export default function MyDashboardPage() {
         `${process.env.NEXT_PUBLIC_API_URL}/api/favorites/${id}`,
         {
           method: 'DELETE',
+          credentials: 'include',
         },
       );
       const data = await response.json();
@@ -118,6 +122,7 @@ export default function MyDashboardPage() {
         `${process.env.NEXT_PUBLIC_API_URL}/api/trainer-applications`,
         {
           method: 'POST',
+          credentials: 'include',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(applyData),
         },

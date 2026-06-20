@@ -98,16 +98,21 @@ export default function CheckoutForm({ classData }) {
           `${process.env.NEXT_PUBLIC_API_URL}/api/bookings`,
           {
             method: 'POST',
+            credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(bookingInfo),
           },
         );
 
-        if (response.ok) {
-          toast.success('Payment & Booking Successful!');
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+          toast.success(data.message || 'Payment & Booking Successful!');
           setTimeout(() => {
             window.location.replace('/dashboard');
           }, 1500);
+        } else {
+          toast.error(data.message || 'Booking failed to save in database.');
         }
       } catch (err) {
         toast.error('Booking failed to save in database.');
@@ -126,10 +131,10 @@ export default function CheckoutForm({ classData }) {
             style: {
               base: {
                 fontSize: '14px',
-                color: '#1e293b',
+                color: '#64748b',
                 fontFamily: 'sans-serif',
                 letterSpacing: '0.025em',
-                '::placeholder': { color: '#94a3b8' },
+                '::placeholder': { color: '#1e293b' },
               },
               invalid: { color: '#ef4444' },
             },

@@ -1,7 +1,6 @@
 import { Providers } from './providers';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-
 import './globals.css';
 import { Toaster } from 'react-hot-toast';
 
