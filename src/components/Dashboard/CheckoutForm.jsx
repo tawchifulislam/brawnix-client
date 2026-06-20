@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import toast from 'react-hot-toast';
 import { authClient } from '@/lib/auth-client';
+import { useRouter } from 'next/navigation';
 
 export default function CheckoutForm({ classData }) {
   const stripe = useStripe();
@@ -12,6 +13,7 @@ export default function CheckoutForm({ classData }) {
   const [processing, setProcessing] = useState(false);
   const { data: session } = authClient.useSession();
   const user = session?.user;
+  const router = useRouter();
 
   useEffect(() => {
     if (classData && classData.price) {
@@ -108,9 +110,7 @@ export default function CheckoutForm({ classData }) {
 
         if (response.ok && data.success) {
           toast.success(data.message || 'Payment & Booking Successful!');
-          setTimeout(() => {
-            window.location.replace('/dashboard');
-          }, 1500);
+          router.push('/dashboard/user/booked-classes');
         } else {
           toast.error(data.message || 'Booking failed to save in database.');
         }
