@@ -20,7 +20,7 @@ export default function ConfirmDialog({ open, title, onConfirm, onCancel }) {
             onClick={onConfirm}
             className="text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 px-4 py-2 rounded-xl cursor-pointer"
           >
-            Delete
+            Okay
           </button>
         </div>
       </div>

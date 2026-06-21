@@ -4,10 +4,12 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
 import Loading from '@/app/loading';
+import ConfirmDialog from '@/components/ConfirmDialog';
 
 export default function ManageTrainersPage() {
   const [trainers, setTrainers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [demoteTargetId, setDemoteTargetId] = useState(null);
 
   const fetchTrainers = () => {
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/trainers`, {
@@ -25,12 +27,15 @@ export default function ManageTrainersPage() {
     fetchTrainers();
   }, []);
 
-  const handleDemote = async id => {
-    if (
-      !window.confirm('Are you sure you want to demote this trainer to User?')
-    ) {
-      return;
-    }
+  const handleDemote = id => {
+    setDemoteTargetId(id);
+  };
+
+  const confirmDemote = async () => {
+    const id = demoteTargetId;
+    setDemoteTargetId(null);
+    if (!id) return;
+
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/trainers/demote/${id}`,
@@ -40,7 +45,7 @@ export default function ManageTrainersPage() {
 
       if (response.ok && data.success) {
         toast.success(data.message || 'Trainer demoted.');
-        setTrainers(trainers.filter(t => t._id !== id));
+        setTrainers(prev => prev.filter(t => t._id !== id));
       } else {
         toast.error(data.message || 'Action failed.');
       }
@@ -121,6 +126,16 @@ export default function ManageTrainersPage() {
           </div>
         </div>
       )}
+
+      <ConfirmDialog
+        open={!!demoteTargetId}
+        title="Demote this trainer to User?"
+        description="They will lose trainer privileges immediately."
+        confirmLabel="Demote"
+        cancelLabel="Cancel"
+        onConfirm={confirmDemote}
+        onCancel={() => setDemoteTargetId(null)}
+      />
     </div>
   );
 }

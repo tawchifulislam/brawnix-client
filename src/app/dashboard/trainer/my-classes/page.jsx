@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { authClient } from '@/lib/auth-client';
 import toast from 'react-hot-toast';
@@ -8,36 +8,45 @@ import { TrashBin, Pencil, Persons } from '@gravity-ui/icons';
 import Loading from '@/app/loading';
 import UpdateClassModal from '@/components/Dashboard/UpdateClassModal';
 import ViewStudentsModal from '@/components/Dashboard/ViewStudentsModal';
+import ConfirmDialog from '@/components/ConfirmDialog';
 
 export default function MyClassesPage() {
   const [classes, setClasses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editingClass, setEditingClass] = useState(null);
   const [viewingClass, setViewingClass] = useState(null);
+  const [deleteTargetId, setDeleteTargetId] = useState(null);
   const { data: session, isPending } = authClient.useSession();
   const user = session?.user;
-  useEffect(() => {
-    const fetchClasses = () => {
-      if (!user?.email) return;
-      fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/classes/trainer/${user.email}`,
-        { credentials: 'include' },
-      )
-        .then(res => res.json())
-        .then(data => {
-          setClasses(Array.isArray(data) ? data : []);
-          setLoading(false);
-        })
-        .catch(() => setLoading(false));
-    };
 
+  const fetchClasses = () => {
+    if (!user?.email) return;
+    fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/classes/trainer/${user.email}`,
+      { credentials: 'include' },
+    )
+      .then(res => res.json())
+      .then(data => {
+        setClasses(Array.isArray(data) ? data : []);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  };
+
+  useEffect(() => {
     fetchClasses();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.email]);
 
-  const handleDelete = async id => {
-    if (!window.confirm('Are you sure you want to delete this class?')) {
-      return;
-    }
+  const handleDelete = id => {
+    setDeleteTargetId(id);
+  };
+
+  const confirmDelete = async () => {
+    const id = deleteTargetId;
+    setDeleteTargetId(null);
+    if (!id) return;
+
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/classes/${id}`,
@@ -47,7 +56,7 @@ export default function MyClassesPage() {
 
       if (response.ok && data.success) {
         toast.success(data.message || 'Class deleted.');
-        setClasses(classes.filter(c => c._id !== id));
+        setClasses(prev => prev.filter(c => c._id !== id));
       } else {
         toast.error(data.message || 'Failed to delete.');
       }
@@ -168,6 +177,14 @@ export default function MyClassesPage() {
           onClose={() => setViewingClass(null)}
         />
       )}
+
+      <ConfirmDialog
+        open={!!deleteTargetId}
+        title="Delete this class?"
+        description="This action cannot be undone."
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteTargetId(null)}
+      />
     </div>
   );
 }

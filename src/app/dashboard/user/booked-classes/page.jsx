@@ -5,10 +5,12 @@ import { authClient } from '@/lib/auth-client';
 import toast from 'react-hot-toast';
 import { TrashBin } from '@gravity-ui/icons';
 import Loading from '@/app/loading';
+import ConfirmDialog from '@/components/ConfirmDialog';
 
 export default function BookedClassesPage() {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [cancelTargetId, setCancelTargetId] = useState(null);
   const { data: session, isPending } = authClient.useSession();
   const user = session?.user;
 
@@ -30,10 +32,15 @@ export default function BookedClassesPage() {
     }
   }, [user]);
 
-  const handleCancelBooking = async id => {
-    if (!window.confirm('Are you sure you want to cancel this booking?')) {
-      return;
-    }
+  const handleCancelBooking = id => {
+    setCancelTargetId(id);
+  };
+
+  const confirmCancelBooking = async () => {
+    const id = cancelTargetId;
+    setCancelTargetId(null);
+    if (!id) return;
+
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/bookings/${id}`,
@@ -46,7 +53,7 @@ export default function BookedClassesPage() {
 
       if (response.ok && data.success) {
         toast.success(data.message || 'Booking cancelled.');
-        setBookings(bookings.filter(b => b._id !== id));
+        setBookings(prev => prev.filter(b => b._id !== id));
       } else {
         toast.error(data.message || 'Failed to cancel.');
       }
@@ -110,6 +117,16 @@ export default function BookedClassesPage() {
           </div>
         </div>
       )}
+
+      <ConfirmDialog
+        open={!!cancelTargetId}
+        title="Cancel this booking?"
+        description="This action cannot be undone."
+        confirmLabel="Cancel Booking"
+        cancelLabel="Keep It"
+        onConfirm={confirmCancelBooking}
+        onCancel={() => setCancelTargetId(null)}
+      />
     </div>
   );
 }
