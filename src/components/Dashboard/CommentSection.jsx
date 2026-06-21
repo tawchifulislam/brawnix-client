@@ -5,6 +5,7 @@ import { authClient } from '@/lib/auth-client';
 import toast from 'react-hot-toast';
 import CommentForm from './CommentForm';
 import CommentItem from './CommentItem';
+import ConfirmDialog from '../ConfirmDialog';
 
 function subscribe() {
   return () => {};
@@ -22,6 +23,7 @@ export default function CommentSection({ postId }) {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [deleteTargetId, setDeleteTargetId] = useState(null);
 
   const mounted = useIsMounted();
   const { data: session } = authClient.useSession();
@@ -103,8 +105,15 @@ export default function CommentSection({ postId }) {
     }
   };
 
-  const handleDeleteComment = async id => {
-    if (!window.confirm('Delete this comment?')) return;
+  const handleDeleteComment = id => {
+    setDeleteTargetId(id);
+  };
+
+  const confirmDeleteComment = async () => {
+    const id = deleteTargetId;
+    setDeleteTargetId(null);
+    if (!id) return;
+
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/comments/${id}`,
@@ -114,7 +123,7 @@ export default function CommentSection({ postId }) {
 
       if (response.ok && data.success) {
         toast.success('Comment deleted.');
-        setComments(comments.filter(c => c._id !== id));
+        setComments(prev => prev.filter(c => c._id !== id));
       } else {
         toast.error(data.message || 'Failed to delete.');
       }
@@ -158,6 +167,14 @@ export default function CommentSection({ postId }) {
           />
         ))
       )}
+
+      <ConfirmDialog
+        open={!!deleteTargetId}
+        title="Delete this comment?"
+        description="This action cannot be undone."
+        onConfirm={confirmDeleteComment}
+        onCancel={() => setDeleteTargetId(null)}
+      />
     </div>
   );
 }
