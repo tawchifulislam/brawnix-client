@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
 import { ArrowChevronLeft } from '@gravity-ui/icons';
+import LikeDislikeButtons from '@/components/Dashboard/LikeDislikeButtons';
+import CommentSection from '@/components/Dashboard/CommentSection';
 
 async function getForumDetails(id) {
   const nextHeaders = await headers();
@@ -84,6 +86,15 @@ export default async function ForumDetailsPage({ params }) {
             {post.description}
           </p>
         </div>
+        <div className="mt-6">
+          <LikeDislikeButtons
+            postId={post._id}
+            initialLikes={post.likes}
+            initialDislikes={post.dislikes}
+          />
+        </div>
+
+        <CommentSection postId={post._id} />
       </div>
     </section>
   );
