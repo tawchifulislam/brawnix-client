@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import toast from 'react-hot-toast';
 import { authClient } from '@/lib/auth-client';
@@ -14,16 +14,19 @@ export default function CheckoutForm({ classData }) {
   const { data: session } = authClient.useSession();
   const user = session?.user;
   const router = useRouter();
+  const hasFetchedRef = useRef(false); // Tracks whether the fetch has already executed
 
   useEffect(() => {
-    if (classData && classData.price) {
+    if (classData && classData.price && user?.email && !hasFetchedRef.current) {
+      hasFetchedRef.current = true; // Set lock immediately to prevent duplicate runs
+
       fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/create-payment-intent`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           price: classData.price,
-          userEmail: user?.email,
+          userEmail: user.email,
         }),
       })
         .then(res => res.json())
@@ -31,12 +34,21 @@ export default function CheckoutForm({ classData }) {
           if (data.clientSecret) {
             setClientSecret(data.clientSecret);
           } else {
-            console.error('Backend did not return clientSecret:', data);
+            toast.error(
+              data.message ||
+                'Unable to start payment. Please try again later.',
+            );
+            if (data.message === 'Action restricted by Admin') {
+              router.push('/dashboard');
+            }
           }
         })
-        .catch(err => console.error('Payment intent error:', err));
+        .catch(err => {
+          console.error('Payment intent error:', err);
+          toast.error('Something went wrong while starting payment.');
+        });
     }
-  }, [classData, user]);
+  }, [classData, user, router]);
 
   const handleSubmit = async e => {
     e.preventDefault();
