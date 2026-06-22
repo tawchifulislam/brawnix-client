@@ -6,11 +6,10 @@ import { authClient } from '@/lib/auth-client';
 import { Heart, LayoutHeaderCursor } from '@gravity-ui/icons';
 import Loading from '@/app/loading';
 
-// Side Note: implementing a lightweight backend route, /api/users/stats?email=, which solely returns the count, would be an efficient optimization.
-
 export default function UserOverviewPage() {
   const [bookingsCount, setBookingsCount] = useState(0);
   const [favoritesCount, setFavoritesCount] = useState(0);
+  const [application, setApplication] = useState(null);
   const [loading, setLoading] = useState(true);
   const { data: session, isPending } = authClient.useSession();
   const user = session?.user;
@@ -27,10 +26,14 @@ export default function UserOverviewPage() {
         `${process.env.NEXT_PUBLIC_API_URL}/api/favorites?email=${user.email}`,
         { credentials: 'include' },
       ).then(res => res.json()),
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/trainer-applications/me`, {
+        credentials: 'include',
+      }).then(res => res.json()),
     ])
-      .then(([bookings, favorites]) => {
+      .then(([bookings, favorites, app]) => {
         setBookingsCount(Array.isArray(bookings) ? bookings.length : 0);
         setFavoritesCount(Array.isArray(favorites) ? favorites.length : 0);
+        setApplication(app);
       })
       .catch(err => console.error(err))
       .finally(() => setLoading(false));
@@ -102,6 +105,40 @@ export default function UserOverviewPage() {
           </div>
         </div>
       </div>
+
+      {application && user?.role !== 'trainer' && (
+        <div
+          className={`p-5 rounded-2xl border ${
+            application.status === 'Rejected'
+              ? 'bg-rose-500/5 border-rose-500/20'
+              : 'bg-amber-500/5 border-amber-500/20'
+          }`}
+        >
+          <p className="text-[11px] font-black uppercase tracking-widest text-slate-400 mb-1">
+            Trainer Application Status
+          </p>
+          <span
+            className={`inline-block px-2.5 py-1 rounded-md text-[10px] font-black uppercase tracking-wider ${
+              application.status === 'Rejected'
+                ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400'
+                : 'bg-amber-500/10 text-amber-600 dark:text-amber-400'
+            }`}
+          >
+            {application.status}
+          </span>
+
+          {application.status === 'Rejected' && application.feedback && (
+            <div className="mt-3 p-3 bg-white dark:bg-slate-950 border border-slate-200/60 dark:border-slate-800 rounded-xl">
+              <p className="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1">
+                Admin Feedback
+              </p>
+              <p className="text-xs text-slate-700 dark:text-slate-300">
+                {application.feedback}
+              </p>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
