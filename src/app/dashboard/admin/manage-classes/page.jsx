@@ -5,10 +5,12 @@ import Image from 'next/image';
 import toast from 'react-hot-toast';
 import { TrashBin } from '@gravity-ui/icons';
 import Loading from '@/app/loading';
+import ConfirmDialog from '@/components/ConfirmDialog';
 
 export default function ManageClassesPage() {
   const [classes, setClasses] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [deleteTargetId, setDeleteTargetId] = useState(null);
 
   const fetchClasses = () => {
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/classes/all`, {
@@ -50,10 +52,15 @@ export default function ManageClassesPage() {
     }
   };
 
-  const handleDelete = async id => {
-    if (!window.confirm('Are you sure you want to delete this class?')) {
-      return;
-    }
+  const handleDelete = id => {
+    setDeleteTargetId(id);
+  };
+
+  const confirmDelete = async () => {
+    const id = deleteTargetId;
+    setDeleteTargetId(null);
+    if (!id) return;
+
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/classes/admin/${id}`,
@@ -63,7 +70,7 @@ export default function ManageClassesPage() {
 
       if (response.ok && data.success) {
         toast.success(data.message || 'Class deleted.');
-        setClasses(classes.filter(c => c._id !== id));
+        setClasses(prev => prev.filter(c => c._id !== id));
       } else {
         toast.error(data.message || 'Failed to delete.');
       }
@@ -175,6 +182,14 @@ export default function ManageClassesPage() {
           </div>
         </div>
       )}
+
+      <ConfirmDialog
+        open={!!deleteTargetId}
+        title="Delete this class?"
+        description="This action cannot be undone."
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteTargetId(null)}
+      />
     </div>
   );
 }

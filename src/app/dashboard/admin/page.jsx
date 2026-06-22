@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { authClient } from '@/lib/auth-client';
 import { Layers, LayoutHeaderCursor, Persons } from '@gravity-ui/icons';
 import Loading from '@/app/loading';
+import AdminStatsChart from '@/components/Dashboard/AdminStatsChart';
 
 export default function AdminOverviewPage() {
   const [stats, setStats] = useState({
@@ -103,6 +104,7 @@ export default function AdminOverviewPage() {
           </div>
         </div>
       </div>
+      <AdminStatsChart />
     </div>
   );
 }
