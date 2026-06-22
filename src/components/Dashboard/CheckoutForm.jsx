@@ -39,7 +39,7 @@ export default function CheckoutForm({ classData }) {
                 'Unable to start payment. Please try again later.',
             );
             if (data.message === 'Action restricted by Admin') {
-              router.push('/dashboard');
+              router.push('/classes');
             }
           }
         })
