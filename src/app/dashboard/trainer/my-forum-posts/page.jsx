@@ -6,10 +6,12 @@ import { authClient } from '@/lib/auth-client';
 import toast from 'react-hot-toast';
 import { TrashBin } from '@gravity-ui/icons';
 import Loading from '@/app/loading';
+import ConfirmDialog from '@/components/ConfirmDialog';
 
 export default function MyForumPostsPage() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [deleteTargetId, setDeleteTargetId] = useState(null);
   const { data: session, isPending } = authClient.useSession();
   const user = session?.user;
 
@@ -28,10 +30,15 @@ export default function MyForumPostsPage() {
       .catch(() => setLoading(false));
   }, [user]);
 
-  const handleDelete = async id => {
-    if (!window.confirm('Are you sure you want to delete this post?')) {
-      return;
-    }
+  const handleDelete = id => {
+    setDeleteTargetId(id);
+  };
+
+  const confirmDelete = async () => {
+    const id = deleteTargetId;
+    setDeleteTargetId(null);
+    if (!id) return;
+
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/forum/${id}`,
@@ -41,7 +48,7 @@ export default function MyForumPostsPage() {
 
       if (response.ok && data.success) {
         toast.success(data.message || 'Post deleted.');
-        setPosts(posts.filter(p => p._id !== id));
+        setPosts(prev => prev.filter(p => p._id !== id));
       } else {
         toast.error(data.message || 'Failed to delete.');
       }
@@ -94,6 +101,14 @@ export default function MyForumPostsPage() {
           ))}
         </div>
       )}
+
+      <ConfirmDialog
+        open={!!deleteTargetId}
+        title="Delete this post?"
+        description="This action cannot be undone."
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteTargetId(null)}
+      />
     </div>
   );
 }

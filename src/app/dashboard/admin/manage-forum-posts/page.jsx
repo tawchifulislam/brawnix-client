@@ -6,10 +6,12 @@ import toast from 'react-hot-toast';
 import { TrashBin } from '@gravity-ui/icons';
 import Loading from '@/app/loading';
 import Link from 'next/link';
+import ConfirmDialog from '@/components/ConfirmDialog';
 
 export default function ManageForumPostsPage() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [deleteTargetId, setDeleteTargetId] = useState(null);
 
   const fetchPosts = () => {
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/forum/all`, {
@@ -27,10 +29,15 @@ export default function ManageForumPostsPage() {
     fetchPosts();
   }, []);
 
-  const handleDelete = async id => {
-    if (!window.confirm('Are you sure you want to remove this post?')) {
-      return;
-    }
+  const handleDelete = id => {
+    setDeleteTargetId(id);
+  };
+
+  const confirmDelete = async () => {
+    const id = deleteTargetId;
+    setDeleteTargetId(null);
+    if (!id) return;
+
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/forum/admin/${id}`,
@@ -40,7 +47,7 @@ export default function ManageForumPostsPage() {
 
       if (response.ok && data.success) {
         toast.success(data.message || 'Post removed.');
-        setPosts(posts.filter(p => p._id !== id));
+        setPosts(prev => prev.filter(p => p._id !== id));
       } else {
         toast.error(data.message || 'Failed to remove.');
       }
@@ -56,7 +63,7 @@ export default function ManageForumPostsPage() {
   return (
     <div className="animate-fadeIn">
       <h2 className="text-xl font-black text-slate-950 dark:text-white tracking-tight mb-4">
-        Forum Post Manage
+        Manage Forum Post
       </h2>
 
       {posts.length === 0 ? (
@@ -100,6 +107,16 @@ export default function ManageForumPostsPage() {
           ))}
         </div>
       )}
+
+      <ConfirmDialog
+        open={!!deleteTargetId}
+        title="Remove this post?"
+        description="This action cannot be undone."
+        confirmLabel="Remove"
+        cancelLabel="Cancel"
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteTargetId(null)}
+      />
     </div>
   );
 }

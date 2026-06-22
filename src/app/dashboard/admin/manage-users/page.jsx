@@ -4,10 +4,12 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
 import Loading from '@/app/loading';
+import ConfirmDialog from '@/components/ConfirmDialog';
 
 export default function ManageUsersPage() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [adminTargetId, setAdminTargetId] = useState(null);
 
   const fetchUsers = () => {
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users`, {
@@ -45,12 +47,15 @@ export default function ManageUsersPage() {
     }
   };
 
-  const handleMakeAdmin = async id => {
-    if (
-      !window.confirm('Are you sure you want to promote this user to Admin?')
-    ) {
-      return;
-    }
+  const handleMakeAdmin = id => {
+    setAdminTargetId(id);
+  };
+
+  const confirmMakeAdmin = async () => {
+    const id = adminTargetId;
+    setAdminTargetId(null);
+    if (!id) return;
+
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/users/make-admin/${id}`,
@@ -173,6 +178,16 @@ export default function ManageUsersPage() {
           </div>
         </div>
       )}
+
+      <ConfirmDialog
+        open={!!adminTargetId}
+        title="Promote this user to Admin?"
+        description="They will gain full admin privileges."
+        confirmLabel="Promote"
+        cancelLabel="Cancel"
+        onConfirm={confirmMakeAdmin}
+        onCancel={() => setAdminTargetId(null)}
+      />
     </div>
   );
 }

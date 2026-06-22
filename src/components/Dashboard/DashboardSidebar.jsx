@@ -82,7 +82,7 @@ export async function DashboardSidebar() {
     {
       icon: 'chatDots',
       href: '/dashboard/admin/manage-forum-posts',
-      label: 'Forum Post Manage',
+      label: 'Manage Forum Post',
     },
   ];
 
