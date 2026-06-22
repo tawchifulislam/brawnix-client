@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import Loading from '@/app/loading';
 
 const LatestForum = () => {
   const [posts, setPosts] = useState([]);
@@ -47,11 +48,7 @@ const LatestForum = () => {
   };
 
   if (loading) {
-    return (
-      <div className="w-full text-center py-16 text-xs font-extrabold uppercase tracking-widest text-orange-600 dark:text-orange-400 animate-pulse">
-        Loading Community Insights...
-      </div>
-    );
+    return <Loading />;
   }
 
   return (

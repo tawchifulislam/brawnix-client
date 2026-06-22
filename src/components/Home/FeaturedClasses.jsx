@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { SealCheck } from '@gravity-ui/icons';
+import Loading from '@/app/loading';
 
 const FeaturedClasses = () => {
   const [classes, setClasses] = useState([]);
@@ -48,11 +49,7 @@ const FeaturedClasses = () => {
   };
 
   if (loading) {
-    return (
-      <div className="w-full text-center py-24 text-xs font-extrabold uppercase tracking-widest text-orange-600 dark:text-orange-400 animate-pulse">
-        Loading Elite Classes...
-      </div>
-    );
+    return <Loading />;
   }
 
   return (

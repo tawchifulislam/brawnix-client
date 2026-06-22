@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Xmark } from '@gravity-ui/icons';
+import Loading from '@/app/loading';
 
 export default function ViewStudentsModal({ classId, className, onClose }) {
   const [students, setStudents] = useState([]);
@@ -46,9 +47,7 @@ export default function ViewStudentsModal({ classId, className, onClose }) {
         </div>
 
         {loading ? (
-          <p className="text-xs text-center text-slate-400 animate-pulse py-6">
-            Loading students...
-          </p>
+          <Loading />
         ) : students.length === 0 ? (
           <p className="text-xs font-bold text-slate-400 py-10 text-center bg-slate-50/50 dark:bg-slate-950/20 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800">
             No students enrolled yet.

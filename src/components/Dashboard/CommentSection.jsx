@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import CommentForm from './CommentForm';
 import CommentItem from './CommentItem';
 import ConfirmDialog from '../ConfirmDialog';
+import Loading from '@/app/loading';
 
 function subscribe() {
   return () => {};
@@ -147,9 +148,7 @@ export default function CommentSection({ postId }) {
       />
 
       {loading ? (
-        <p className="text-xs text-center text-slate-400 animate-pulse py-6">
-          Loading comments...
-        </p>
+        <Loading />
       ) : topLevelComments.length === 0 ? (
         <p className="text-xs font-bold text-slate-400 py-6 text-center">
           No comments yet. Be the first to share your thoughts!
