@@ -49,7 +49,7 @@ export default function AddClassPage() {
       };
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/classes`,
+        `${process.env.NEXT_PUBLIC_PROXY_URL}/api/classes`,
         {
           method: 'POST',
           credentials: 'include',

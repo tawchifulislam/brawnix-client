@@ -17,7 +17,7 @@ export default function TrainerOverviewPage() {
     if (!user?.email) return;
 
     fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/classes/trainer/${user.email}`,
+      `${process.env.NEXT_PUBLIC_PROXY_URL}/api/classes/trainer/${user.email}`,
       { credentials: 'include' },
     )
       .then(res => res.json())

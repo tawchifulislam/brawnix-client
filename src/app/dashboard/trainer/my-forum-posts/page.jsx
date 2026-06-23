@@ -19,7 +19,7 @@ export default function MyForumPostsPage() {
     if (!user?.email) return;
 
     fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/forum/trainer/${user.email}`,
+      `${process.env.NEXT_PUBLIC_PROXY_URL}/api/forum/trainer/${user.email}`,
       { credentials: 'include' },
     )
       .then(res => res.json())
@@ -41,7 +41,7 @@ export default function MyForumPostsPage() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/forum/${id}`,
+        `${process.env.NEXT_PUBLIC_PROXY_URL}/api/forum/${id}`,
         { method: 'DELETE', credentials: 'include' },
       );
       const data = await response.json();
