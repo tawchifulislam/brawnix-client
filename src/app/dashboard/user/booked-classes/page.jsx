@@ -17,7 +17,7 @@ export default function BookedClassesPage() {
   useEffect(() => {
     if (user?.email) {
       fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/my-bookings?email=${user.email}`,
+        `${process.env.NEXT_PUBLIC_PROXY_URL}/api/my-bookings?email=${user.email}`,
         { credentials: 'include' },
       )
         .then(res => res.json())
@@ -43,7 +43,7 @@ export default function BookedClassesPage() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/bookings/${id}`,
+        `${process.env.NEXT_PUBLIC_PROXY_URL}/api/bookings/${id}`,
         {
           method: 'DELETE',
           credentials: 'include',
