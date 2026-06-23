@@ -10,7 +10,7 @@ export default function AppliedTrainersPage() {
   const [selectedApp, setSelectedApp] = useState(null);
 
   const fetchApplications = () => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/trainer-applications`, {
+    fetch(`${process.env.NEXT_PUBLIC_PROXY_URL}/api/trainer-applications`, {
       credentials: 'include',
     })
       .then(res => res.json())

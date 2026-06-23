@@ -18,7 +18,7 @@ export default function AdminOverviewPage() {
   const user = session?.user;
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin-stats`, {
+    fetch(`${process.env.NEXT_PUBLIC_PROXY_URL}/api/admin-stats`, {
       credentials: 'include',
     })
       .then(res => res.json())

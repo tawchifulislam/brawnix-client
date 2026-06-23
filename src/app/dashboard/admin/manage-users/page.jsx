@@ -12,7 +12,7 @@ export default function ManageUsersPage() {
   const [adminTargetId, setAdminTargetId] = useState(null);
 
   const fetchUsers = () => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users`, {
+    fetch(`${process.env.NEXT_PUBLIC_PROXY_URL}/api/users`, {
       credentials: 'include',
     })
       .then(res => res.json())
@@ -31,7 +31,7 @@ export default function ManageUsersPage() {
     const action = currentStatus === 'blocked' ? 'unblock' : 'block';
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/users/${action}/${id}`,
+        `${process.env.NEXT_PUBLIC_PROXY_URL}/api/users/${action}/${id}`,
         { method: 'PATCH', credentials: 'include' },
       );
       const data = await response.json();
@@ -58,7 +58,7 @@ export default function ManageUsersPage() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/users/make-admin/${id}`,
+        `${process.env.NEXT_PUBLIC_PROXY_URL}/api/users/make-admin/${id}`,
         { method: 'PATCH', credentials: 'include' },
       );
       const data = await response.json();

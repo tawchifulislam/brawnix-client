@@ -14,7 +14,7 @@ export default function ManageForumPostsPage() {
   const [deleteTargetId, setDeleteTargetId] = useState(null);
 
   const fetchPosts = () => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/forum/all`, {
+    fetch(`${process.env.NEXT_PUBLIC_PROXY_URL}/api/forum/all`, {
       credentials: 'include',
     })
       .then(res => res.json())
@@ -40,7 +40,7 @@ export default function ManageForumPostsPage() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/forum/admin/${id}`,
+        `${process.env.NEXT_PUBLIC_PROXY_URL}/api/forum/admin/${id}`,
         { method: 'DELETE', credentials: 'include' },
       );
       const data = await response.json();

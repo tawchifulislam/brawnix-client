@@ -32,7 +32,7 @@ export default function AdminAddForumPostPage() {
       };
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/forum`,
+        `${process.env.NEXT_PUBLIC_PROXY_URL}/api/forum`,
         {
           method: 'POST',
           credentials: 'include',

@@ -12,7 +12,7 @@ export default function ManageTrainersPage() {
   const [demoteTargetId, setDemoteTargetId] = useState(null);
 
   const fetchTrainers = () => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/trainers`, {
+    fetch(`${process.env.NEXT_PUBLIC_PROXY_URL}/api/trainers`, {
       credentials: 'include',
     })
       .then(res => res.json())
@@ -38,7 +38,7 @@ export default function ManageTrainersPage() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/trainers/demote/${id}`,
+        `${process.env.NEXT_PUBLIC_PROXY_URL}/api/trainers/demote/${id}`,
         { method: 'PATCH', credentials: 'include' },
       );
       const data = await response.json();

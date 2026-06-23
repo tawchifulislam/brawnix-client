@@ -8,7 +8,7 @@ export default function TransactionsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/transactions`, {
+    fetch(`${process.env.NEXT_PUBLIC_PROXY_URL}/api/transactions`, {
       credentials: 'include',
     })
       .then(res => res.json())

@@ -13,7 +13,7 @@ export default function ManageClassesPage() {
   const [deleteTargetId, setDeleteTargetId] = useState(null);
 
   const fetchClasses = () => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/classes/all`, {
+    fetch(`${process.env.NEXT_PUBLIC_PROXY_URL}/api/classes/all`, {
       credentials: 'include',
     })
       .then(res => res.json())
@@ -31,7 +31,7 @@ export default function ManageClassesPage() {
   const handleStatusChange = async (id, status) => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/classes/status/${id}`,
+        `${process.env.NEXT_PUBLIC_PROXY_URL}/api/classes/status/${id}`,
         {
           method: 'PATCH',
           credentials: 'include',
@@ -63,7 +63,7 @@ export default function ManageClassesPage() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/classes/admin/${id}`,
+        `${process.env.NEXT_PUBLIC_PROXY_URL}/api/classes/admin/${id}`,
         { method: 'DELETE', credentials: 'include' },
       );
       const data = await response.json();
