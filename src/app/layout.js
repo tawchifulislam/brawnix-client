@@ -3,6 +3,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import './globals.css';
 import { Toaster } from 'react-hot-toast';
+import AuthSync from '@/components/AuthSync';
 
 export default function RootLayout({ children }) {
   return (
@@ -12,6 +13,7 @@ export default function RootLayout({ children }) {
         className="min-h-screen flex flex-col bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-50 antialiased"
       >
         <Providers>
+          <AuthSync />
           <Navbar />
           <main className="grow">{children}</main>
           <Footer />

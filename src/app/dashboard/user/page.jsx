@@ -19,16 +19,19 @@ export default function UserOverviewPage() {
 
     Promise.all([
       fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/my-bookings?email=${user.email}`,
+        `${process.env.NEXT_PUBLIC_PROXY_URL}/api/my-bookings?email=${user.email}`,
         { credentials: 'include' },
       ).then(res => res.json()),
       fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/favorites?email=${user.email}`,
+        `${process.env.NEXT_PUBLIC_PROXY_URL}/api/favorites?email=${user.email}`,
         { credentials: 'include' },
       ).then(res => res.json()),
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/trainer-applications/me`, {
-        credentials: 'include',
-      }).then(res => res.json()),
+      fetch(
+        `${process.env.NEXT_PUBLIC_PROXY_URL}/api/trainer-applications/me`,
+        {
+          credentials: 'include',
+        },
+      ).then(res => res.json()),
     ])
       .then(([bookings, favorites, app]) => {
         setBookingsCount(Array.isArray(bookings) ? bookings.length : 0);

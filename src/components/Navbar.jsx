@@ -34,7 +34,8 @@ const Navbar = () => {
   const handleLogout = async () => {
     await authClient.signOut({
       fetchOptions: {
-        onSuccess: () => {
+        onSuccess: async () => {
+          await fetch('/api/clear-token');
           toast.success('Logged out successfully!');
           setIsProfileOpen(false);
           setIsMenuOpen(false);
