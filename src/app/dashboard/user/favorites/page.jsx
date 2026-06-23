@@ -15,7 +15,7 @@ export default function FavoritesPage() {
   useEffect(() => {
     if (user?.email) {
       fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/favorites?email=${user.email}`,
+        `${process.env.NEXT_PUBLIC_PROXY_URL}/api/favorites?email=${user.email}`,
         { credentials: 'include' },
       )
         .then(res => res.json())
@@ -33,7 +33,7 @@ export default function FavoritesPage() {
   const handleRemoveFavorite = async id => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/favorites/${id}`,
+        `${process.env.NEXT_PUBLIC_PROXY_URL}/api/favorites/${id}`,
         {
           method: 'DELETE',
           credentials: 'include',

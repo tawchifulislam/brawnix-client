@@ -28,7 +28,7 @@ export default function ApplyTrainerPage() {
       };
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/trainer-applications`,
+        `${process.env.NEXT_PUBLIC_PROXY_URL}/api/trainer-applications`,
         {
           method: 'POST',
           credentials: 'include',
