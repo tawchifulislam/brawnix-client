@@ -15,8 +15,8 @@ function subscribe() {
 function useIsMounted() {
   return useSyncExternalStore(
     subscribe,
-    () => true, // client snapshot
-    () => false, // server snapshot
+    () => true,
+    () => false,
   );
 }
 
@@ -31,7 +31,7 @@ export default function CommentSection({ postId }) {
   const user = mounted ? session?.user : null;
 
   const fetchComments = () => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/comments/${postId}`, {
+    fetch(`${process.env.NEXT_PUBLIC_PROXY_URL}/api/comments/${postId}`, {
       credentials: 'include',
     })
       .then(res => res.json())
@@ -56,7 +56,7 @@ export default function CommentSection({ postId }) {
     setIsSubmitting(true);
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/comments`,
+        `${process.env.NEXT_PUBLIC_PROXY_URL}/api/comments`,
         {
           method: 'POST',
           credentials: 'include',
@@ -86,7 +86,7 @@ export default function CommentSection({ postId }) {
   const handleUpdateComment = async (id, text) => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/comments/${id}`,
+        `${process.env.NEXT_PUBLIC_PROXY_URL}/api/comments/${id}`,
         {
           method: 'PATCH',
           credentials: 'include',
@@ -117,7 +117,7 @@ export default function CommentSection({ postId }) {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/comments/${id}`,
+        `${process.env.NEXT_PUBLIC_PROXY_URL}/api/comments/${id}`,
         { method: 'DELETE', credentials: 'include' },
       );
       const data = await response.json();

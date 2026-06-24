@@ -10,7 +10,7 @@ export default function ViewStudentsModal({ classId, className, onClose }) {
 
   useEffect(() => {
     fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/classes/${classId}/students`,
+      `${process.env.NEXT_PUBLIC_PROXY_URL}/api/classes/${classId}/students`,
       { credentials: 'include' },
     )
       .then(res => res.json())

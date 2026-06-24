@@ -37,7 +37,7 @@ export default function UpdateClassModal({ classData, onClose, onUpdated }) {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/classes/${classData._id}`,
+        `${process.env.NEXT_PUBLIC_PROXY_URL}/api/classes/${classData._id}`,
         {
           method: 'PATCH',
           credentials: 'include',

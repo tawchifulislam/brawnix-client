@@ -74,7 +74,7 @@ export default function AdminStatsChart() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin-stats`, {
+    fetch(`${process.env.NEXT_PUBLIC_PROXY_URL}/api/admin-stats`, {
       credentials: 'include',
     })
       .then(res => res.json())

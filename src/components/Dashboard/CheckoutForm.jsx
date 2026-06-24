@@ -14,13 +14,13 @@ export default function CheckoutForm({ classData }) {
   const { data: session } = authClient.useSession();
   const user = session?.user;
   const router = useRouter();
-  const hasFetchedRef = useRef(false); // Tracks whether the fetch has already executed
+  const hasFetchedRef = useRef(false);
 
   useEffect(() => {
     if (classData && classData.price && user?.email && !hasFetchedRef.current) {
-      hasFetchedRef.current = true; // Set lock immediately to prevent duplicate runs
+      hasFetchedRef.current = true;
 
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/create-payment-intent`, {
+      fetch(`${process.env.NEXT_PUBLIC_PROXY_URL}/api/create-payment-intent`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -109,7 +109,7 @@ export default function CheckoutForm({ classData }) {
 
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/bookings`,
+          `${process.env.NEXT_PUBLIC_PROXY_URL}/api/bookings`,
           {
             method: 'POST',
             credentials: 'include',

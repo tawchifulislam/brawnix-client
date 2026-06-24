@@ -16,7 +16,7 @@ export default function ApplicationDetailsModal({
     setIsSubmitting(true);
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/trainer-applications/${application._id}`,
+        `${process.env.NEXT_PUBLIC_PROXY_URL}/api/trainer-applications/${application._id}`,
         {
           method: 'PATCH',
           credentials: 'include',

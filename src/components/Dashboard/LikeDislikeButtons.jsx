@@ -29,7 +29,7 @@ export default function LikeDislikeButtons({
     setIsSubmitting(true);
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/forum/${type}/${postId}`,
+        `${process.env.NEXT_PUBLIC_PROXY_URL}/api/forum/${type}/${postId}`,
         { method: 'PATCH', credentials: 'include' },
       );
       const data = await response.json();

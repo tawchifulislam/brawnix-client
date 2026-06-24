@@ -21,7 +21,7 @@ export default function PaymentPage() {
 
   useEffect(() => {
     if (classId) {
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/classes/${classId}`, {
+      fetch(`${process.env.NEXT_PUBLIC_PROXY_URL}/api/classes/${classId}`, {
         credentials: 'include',
       })
         .then(res => res.json())
