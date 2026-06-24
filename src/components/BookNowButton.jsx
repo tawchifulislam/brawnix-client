@@ -21,7 +21,7 @@ export default function BookNowButton({ classData }) {
     }
 
     fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/bookings/check?email=${user.email}&classId=${classData._id}`,
+      `${process.env.NEXT_PUBLIC_PROXY_URL}/api/bookings/check?email=${user.email}&classId=${classData._id}`,
       { credentials: 'include' },
     )
       .then(res => res.json())

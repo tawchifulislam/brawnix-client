@@ -27,7 +27,7 @@ export default function FavoriteButton({ classData }) {
       };
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/favorites`,
+        `${process.env.NEXT_PUBLIC_PROXY_URL}/api/favorites`,
         {
           method: 'POST',
           credentials: 'include',

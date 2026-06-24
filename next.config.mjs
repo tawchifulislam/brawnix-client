@@ -3,7 +3,7 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/api/proxy/:path*',
+        source: '/api/proxy/api/:path*',
         destination: `${process.env.BACKEND_URL}/api/:path*`,
       },
     ];
@@ -26,4 +26,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+export default nextConfig;
