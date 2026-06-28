@@ -36,6 +36,12 @@ admins manage the platform.**
 - Review trainer applications
 - Analytics dashboard for roles and approvals (Recharts)
 
+## 🛠️ Testing & Admin Credentials
+
+| Role      | Email               | Password      |
+| :-------- | :------------------ | :------------ |
+| **Admin** | `admin@brawnix.com` | `Password123` |
+
 ### 🌐 Platform
 
 - Role-based authentication and route protection
