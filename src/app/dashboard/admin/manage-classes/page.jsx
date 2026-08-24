@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import { TrashBin } from '@gravity-ui/icons';
 import Loading from '@/app/loading';
 import ConfirmDialog from '@/components/ConfirmDialog';
+import TableRowSkeleton from '@/components/skeletons/TableRowSkeleton';
 
 export default function ManageClassesPage() {
   const [classes, setClasses] = useState([]);
@@ -89,7 +90,27 @@ export default function ManageClassesPage() {
   };
 
   if (loading) {
-    return <Loading />;
+    return (
+      <div className="animate-fadeIn">
+        <div className="h-6 w-40 bg-slate-100 dark:bg-slate-800 rounded-full animate-pulse mb-4" />
+        <div className="w-full overflow-hidden border border-slate-200/60 dark:border-slate-800 rounded-2xl shadow-sm">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-100/60 dark:bg-slate-900/40">
+                  <th className="py-3 px-4 h-10" colSpan={5} />
+                </tr>
+              </thead>
+              <tbody>
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <TableRowSkeleton key={i} cols={5} />
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (

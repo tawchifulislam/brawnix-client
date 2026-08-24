@@ -57,7 +57,28 @@ export default function ManageForumPostsPage() {
   };
 
   if (loading) {
-    return <Loading />;
+    return (
+      <div className="animate-fadeIn">
+        <div className="h-6 w-48 bg-slate-100 dark:bg-slate-800 rounded-full animate-pulse mb-4" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div
+              key={i}
+              className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-950/40 border border-slate-200/60 dark:border-slate-800 rounded-2xl animate-pulse"
+            >
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-12 h-12 rounded-xl bg-slate-200 dark:bg-slate-800 shrink-0" />
+                <div className="space-y-2">
+                  <div className="h-3 w-36 bg-slate-200 dark:bg-slate-800 rounded-full" />
+                  <div className="h-2 w-20 bg-slate-200 dark:bg-slate-800 rounded-full" />
+                </div>
+              </div>
+              <div className="w-8 h-8 bg-slate-200 dark:bg-slate-800 rounded-lg shrink-0" />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
   }
 
   return (
