@@ -3,9 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { authClient } from '@/lib/auth-client';
-import { Layers, LayoutHeaderCursor, Persons } from '@gravity-ui/icons';
-import Loading from '@/app/loading';
-import AdminStatsChart from '@/components/Dashboard/AdminStatsChart';
+import { Users, Layers, LayoutHeaderCursor } from '@gravity-ui/icons';
+import AdminStatsChart from '@/components/AdminStatsChart';
 
 export default function AdminOverviewPage() {
   const [stats, setStats] = useState({
@@ -18,7 +17,7 @@ export default function AdminOverviewPage() {
   const user = session?.user;
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_PROXY_URL}/api/admin-stats`, {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin-stats`, {
       credentials: 'include',
     })
       .then(res => res.json())
@@ -28,7 +27,38 @@ export default function AdminOverviewPage() {
   }, []);
 
   if (isPending || loading) {
-    return <Loading />;
+    return (
+      <div className="animate-fadeIn space-y-6">
+        <div className="h-6 w-40 bg-slate-100 dark:bg-slate-800 rounded-full animate-pulse" />
+        <div className="flex flex-col sm:flex-row items-center gap-5 p-5 bg-slate-50 dark:bg-slate-950/40 border border-slate-200/60 dark:border-slate-800 rounded-2xl animate-pulse">
+          <div className="w-16 h-16 rounded-full bg-slate-200 dark:bg-slate-800 shrink-0" />
+          <div className="space-y-2 flex-1 w-full">
+            <div className="h-4 w-32 bg-slate-200 dark:bg-slate-800 rounded-full" />
+            <div className="h-3 w-48 bg-slate-200 dark:bg-slate-800 rounded-full" />
+            <div className="h-6 w-16 bg-slate-200 dark:bg-slate-800 rounded-md mt-2" />
+          </div>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {[1, 2, 3].map(i => (
+            <div
+              key={i}
+              className="p-5 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl animate-pulse"
+            >
+              <div className="h-3 w-24 bg-slate-100 dark:bg-slate-800 rounded-full mb-4" />
+              <div className="h-8 w-12 bg-slate-100 dark:bg-slate-800 rounded-full" />
+            </div>
+          ))}
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {[1, 2].map(i => (
+            <div
+              key={i}
+              className="h-72 bg-slate-50 dark:bg-slate-950/40 border border-slate-200/60 dark:border-slate-800 rounded-2xl animate-pulse"
+            />
+          ))}
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -53,7 +83,7 @@ export default function AdminOverviewPage() {
             {user?.name}
           </p>
           <p className="text-xs font-bold text-slate-400">{user?.email}</p>
-          <div className="pt-2 flex flex-wrap gap-2 justify-center sm:justify-start">
+          <div className="pt-2">
             <span className="bg-orange-500/10 text-orange-600 dark:text-orange-400 text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">
               Role: Admin
             </span>
@@ -72,7 +102,7 @@ export default function AdminOverviewPage() {
             </p>
           </div>
           <div className="w-12 h-12 rounded-xl bg-orange-500/10 flex items-center justify-center text-xl">
-            <Persons />
+            <Users />
           </div>
         </div>
 
