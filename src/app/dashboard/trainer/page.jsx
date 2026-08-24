@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { authClient } from '@/lib/auth-client';
-import { Layers, Users } from '@gravity-ui/icons';
+import { Layers, PersonFill } from '@gravity-ui/icons';
 
 export default function TrainerOverviewPage() {
   const [classesCount, setClassesCount] = useState(0);
@@ -117,7 +117,7 @@ export default function TrainerOverviewPage() {
             </p>
           </div>
           <div className="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-xl">
-            <Users />
+            <PersonFill />
           </div>
         </div>
       </div>

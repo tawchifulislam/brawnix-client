@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { authClient } from '@/lib/auth-client';
-import { Users, Layers, LayoutHeaderCursor } from '@gravity-ui/icons';
-import AdminStatsChart from '@/components/AdminStatsChart';
+import { Layers, LayoutHeaderCursor, PersonFill } from '@gravity-ui/icons';
+import AdminStatsChart from '@/components/Dashboard/AdminStatsChart';
 
 export default function AdminOverviewPage() {
   const [stats, setStats] = useState({
@@ -102,7 +102,7 @@ export default function AdminOverviewPage() {
             </p>
           </div>
           <div className="w-12 h-12 rounded-xl bg-orange-500/10 flex items-center justify-center text-xl">
-            <Users />
+            <PersonFill />
           </div>
         </div>
 
