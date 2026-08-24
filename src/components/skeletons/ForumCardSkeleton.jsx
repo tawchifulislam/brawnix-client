@@ -7,7 +7,7 @@ export default function ForumCardSkeleton() {
         <div className="h-3 bg-slate-100 dark:bg-slate-800 rounded-full w-full" />
         <div className="h-3 bg-slate-100 dark:bg-slate-800 rounded-full w-2/3" />
         <div className="flex items-center gap-3 mt-3">
-          <div className="w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-800" />
+          <div className="w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-800 shrink-0" />
           <div className="h-3 bg-slate-100 dark:bg-slate-800 rounded-full w-1/4" />
         </div>
       </div>
