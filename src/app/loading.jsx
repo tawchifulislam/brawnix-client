@@ -5,7 +5,7 @@ import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
 export default function Loading() {
   return (
-    <div className="fixed inset-0 z-50 bg-white dark:bg-slate-900 flex items-center justify-center transition-colors duration-300 select-none">
+    <div className="w-full min-h-[70vh] bg-white dark:bg-slate-900 flex items-center justify-center transition-colors duration-300 select-none">
       <div className="w-36 h-36 sm:w-44 sm:h-44">
         <DotLottieReact
           src="/animation/loading.json"
