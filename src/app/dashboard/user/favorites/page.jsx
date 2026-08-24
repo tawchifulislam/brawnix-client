@@ -12,18 +12,17 @@ export default function FavoritesPage() {
   const user = session?.user;
 
   useEffect(() => {
-    if (user?.email) {
-      fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/favorites?email=${user.email}`,
-        { credentials: 'include' },
-      )
-        .then(res => res.json())
-        .then(data => {
-          setFavorites(data);
-          setLoading(false);
-        })
-        .catch(() => setLoading(false));
-    }
+    if (!user?.email) return;
+    fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/favorites?email=${user.email}`,
+      { credentials: 'include' },
+    )
+      .then(res => res.json())
+      .then(data => {
+        setFavorites(Array.isArray(data) ? data : []);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
   }, [user]);
 
   const handleRemoveFavorite = async id => {
@@ -44,15 +43,12 @@ export default function FavoritesPage() {
     }
   };
 
-  const isLoading = isPending || loading;
-
-  return (
-    <div className="animate-fadeIn">
-      <h2 className="text-xl font-black text-slate-950 dark:text-white tracking-tight mb-4">
-        Bookmarked Wishlist
-      </h2>
-
-      {isLoading ? (
+  if (isPending || loading) {
+    return (
+      <div className="animate-fadeIn">
+        <h2 className="text-xl font-black text-slate-950 dark:text-white tracking-tight mb-4">
+          Bookmarked Wishlist
+        </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {Array.from({ length: 4 }).map((_, i) => (
             <div
@@ -70,7 +66,17 @@ export default function FavoritesPage() {
             </div>
           ))}
         </div>
-      ) : favorites.length === 0 ? (
+      </div>
+    );
+  }
+
+  return (
+    <div className="animate-fadeIn">
+      <h2 className="text-xl font-black text-slate-950 dark:text-white tracking-tight mb-4">
+        Bookmarked Wishlist
+      </h2>
+
+      {favorites.length === 0 ? (
         <p className="text-xs font-bold text-slate-400 py-10 text-center bg-slate-50/50 dark:bg-slate-950/20 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800">
           Your bookmarked wishlist is empty.
         </p>

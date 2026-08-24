@@ -13,25 +13,45 @@ export default function BookedClassesPage() {
   const user = session?.user;
 
   useEffect(() => {
-    if (user?.email) {
-      fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/my-bookings?email=${user.email}`,
-        { credentials: 'include' },
-      )
-        .then(res => res.json())
-        .then(data => {
-          setBookings(data);
-          setLoading(false);
-        })
-        .catch(() => setLoading(false));
-    }
+    if (!user?.email) return;
+    fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/my-bookings?email=${user.email}`,
+      { credentials: 'include' },
+    )
+      .then(res => res.json())
+      .then(data => {
+        setBookings(Array.isArray(data) ? data : []);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
   }, [user]);
+
+  const handleCancelBooking = async id => {
+    if (!window.confirm('Are you sure you want to cancel this booking?'))
+      return;
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/bookings/${id}`,
+        { method: 'DELETE', credentials: 'include' },
+      );
+      const data = await response.json();
+      if (response.ok && data.success) {
+        toast.success(data.message || 'Booking cancelled.');
+        setBookings(bookings.filter(b => b._id !== id));
+      } else {
+        toast.error(data.message || 'Failed to cancel.');
+      }
+    } catch {
+      toast.error('Something went wrong.');
+    }
+  };
 
   return (
     <div className="animate-fadeIn">
       <h2 className="text-xl font-black text-slate-950 dark:text-white tracking-tight mb-4">
         My Booked Sessions
       </h2>
+
       <div className="w-full overflow-hidden border border-slate-200/60 dark:border-slate-800 rounded-2xl shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
@@ -75,7 +95,7 @@ export default function BookedClassesPage() {
                     <td className="py-3 px-4">
                       <button
                         onClick={() => handleCancelBooking(b._id)}
-                        className="text-rose-600 bg-rose-500/10 p-1.5 rounded-lg cursor-pointer"
+                        className="text-rose-600 bg-rose-500/10 p-1.5 rounded-lg cursor-pointer hover:bg-rose-500/20 transition-colors"
                       >
                         <TrashBin style={{ fontSize: '14px' }} />
                       </button>
@@ -89,24 +109,4 @@ export default function BookedClassesPage() {
       </div>
     </div>
   );
-
-  async function handleCancelBooking(id) {
-    if (!window.confirm('Are you sure you want to cancel this booking?'))
-      return;
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/bookings/${id}`,
-        { method: 'DELETE', credentials: 'include' },
-      );
-      const data = await response.json();
-      if (response.ok && data.success) {
-        toast.success(data.message || 'Booking cancelled.');
-        setBookings(bookings.filter(b => b._id !== id));
-      } else {
-        toast.error(data.message || 'Failed to cancel.');
-      }
-    } catch {
-      toast.error('Something went wrong.');
-    }
-  }
 }

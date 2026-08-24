@@ -43,8 +43,9 @@ export default function LatestForum() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}
+                  className="h-full"
                 >
-                  <Link href={`/forum/${post._id}`}>
+                  <Link href={`/forum/${post._id}`} className="h-full block">
                     <div className="group rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 overflow-hidden hover:border-orange-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-orange-500/5 cursor-pointer h-full">
                       <div className="relative w-full h-40 overflow-hidden">
                         <Image

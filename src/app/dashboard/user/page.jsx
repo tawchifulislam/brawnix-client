@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { authClient } from '@/lib/auth-client';
 import { Heart, LayoutHeaderCursor } from '@gravity-ui/icons';
-import Loading from '@/app/loading';
 
 export default function UserOverviewPage() {
   const [bookingsCount, setBookingsCount] = useState(0);
@@ -19,19 +18,16 @@ export default function UserOverviewPage() {
 
     Promise.all([
       fetch(
-        `${process.env.NEXT_PUBLIC_PROXY_URL}/api/my-bookings?email=${user.email}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/my-bookings?email=${user.email}`,
         { credentials: 'include' },
       ).then(res => res.json()),
       fetch(
-        `${process.env.NEXT_PUBLIC_PROXY_URL}/api/favorites?email=${user.email}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/favorites?email=${user.email}`,
         { credentials: 'include' },
       ).then(res => res.json()),
-      fetch(
-        `${process.env.NEXT_PUBLIC_PROXY_URL}/api/trainer-applications/me`,
-        {
-          credentials: 'include',
-        },
-      ).then(res => res.json()),
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/trainer-applications/me`, {
+        credentials: 'include',
+      }).then(res => res.json()),
     ])
       .then(([bookings, favorites, app]) => {
         setBookingsCount(Array.isArray(bookings) ? bookings.length : 0);
@@ -43,7 +39,33 @@ export default function UserOverviewPage() {
   }, [user]);
 
   if (isPending || loading) {
-    return <Loading />;
+    return (
+      <div className="animate-fadeIn space-y-6">
+        <div className="h-6 w-40 bg-slate-100 dark:bg-slate-800 rounded-full animate-pulse" />
+        <div className="flex flex-col sm:flex-row items-center gap-5 p-5 bg-slate-50 dark:bg-slate-950/40 border border-slate-200/60 dark:border-slate-800 rounded-2xl animate-pulse">
+          <div className="w-16 h-16 rounded-full bg-slate-200 dark:bg-slate-800 shrink-0" />
+          <div className="space-y-2 flex-1 w-full">
+            <div className="h-4 w-32 bg-slate-200 dark:bg-slate-800 rounded-full" />
+            <div className="h-3 w-48 bg-slate-200 dark:bg-slate-800 rounded-full" />
+            <div className="flex gap-2 mt-2">
+              <div className="h-6 w-20 bg-slate-200 dark:bg-slate-800 rounded-md" />
+              <div className="h-6 w-20 bg-slate-200 dark:bg-slate-800 rounded-md" />
+            </div>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {[1, 2].map(i => (
+            <div
+              key={i}
+              className="p-5 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl animate-pulse"
+            >
+              <div className="h-3 w-24 bg-slate-100 dark:bg-slate-800 rounded-full mb-4" />
+              <div className="h-8 w-12 bg-slate-100 dark:bg-slate-800 rounded-full" />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
   }
 
   return (
