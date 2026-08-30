@@ -21,7 +21,7 @@ export default function LatestForum() {
   }, []);
 
   return (
-    <section className="w-full py-16 px-4 sm:px-6 lg:px-8 bg-zinc-50 dark:bg-black">
+    <section className="w-full py-16 px-4 sm:px-6 lg:px-8 bg-zinc-50 dark:bg-slate-900">
       <div className="mx-auto max-w-7xl">
         <div className="mb-10 text-center">
           <span className="text-[11px] font-black uppercase tracking-widest text-orange-600 dark:text-orange-400">
