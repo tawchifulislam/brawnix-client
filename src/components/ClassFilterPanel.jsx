@@ -1,8 +1,19 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Magnifier, ChevronDown } from '@gravity-ui/icons';
+
+function useDebounce(value, delay = 300) {
+  const [debounced, setDebounced] = useState(value);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebounced(value), delay);
+    return () => clearTimeout(timer);
+  }, [value, delay]);
+
+  return debounced;
+}
 
 export default function ClassFilterPanel() {
   const router = useRouter();
@@ -10,6 +21,10 @@ export default function ClassFilterPanel() {
 
   const currentSearch = searchParams.get('search') || '';
   const currentCategory = searchParams.get('category') || '';
+
+  const [searchInput, setSearchInput] = useState(currentSearch);
+  const debouncedSearch = useDebounce(searchInput, 300);
+
   const categories = [
     'Yoga',
     'Cardio',
@@ -19,11 +34,20 @@ export default function ClassFilterPanel() {
     'Pilates',
   ];
 
-  const updateQuery = (key, value) => {
+  useEffect(() => {
     const params = new URLSearchParams(searchParams.toString());
-    if (value) params.set(key, value);
-    else params.delete(key);
+    if (debouncedSearch) {
+      params.set('search', debouncedSearch);
+    } else {
+      params.delete('search');
+    }
+    router.push(`/classes?${params.toString()}`, { scroll: false });
+  }, [debouncedSearch, router, searchParams]);
 
+  const updateCategory = value => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (value) params.set('category', value);
+    else params.delete('category');
     router.push(`/classes?${params.toString()}`, { scroll: false });
   };
 
@@ -36,8 +60,8 @@ export default function ClassFilterPanel() {
         <input
           type="text"
           placeholder="Search fitness classes by name..."
-          defaultValue={currentSearch}
-          onChange={e => updateQuery('search', e.target.value)}
+          value={searchInput}
+          onChange={e => setSearchInput(e.target.value)}
           className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 pl-11 pr-4 py-3.5 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 focus:outline-none transition-all shadow-sm font-semibold"
         />
       </div>
@@ -48,7 +72,7 @@ export default function ClassFilterPanel() {
         </span>
         <select
           value={currentCategory}
-          onChange={e => updateQuery('category', e.target.value)}
+          onChange={e => updateCategory(e.target.value)}
           className="w-full appearance-none rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3.5 text-sm text-slate-900 dark:text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 focus:outline-none transition-all shadow-sm font-black tracking-wide cursor-pointer"
         >
           <option value="">All Categories</option>
