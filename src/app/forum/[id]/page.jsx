@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { headers } from 'next/headers';
 import { ArrowChevronLeft } from '@gravity-ui/icons';
 import LikeDislikeButtons from '@/components/Dashboard/LikeDislikeButtons';
@@ -30,7 +30,7 @@ export default async function ForumDetailsPage({ params }) {
   const post = await getForumDetails(resolvedParams.id);
 
   if (!post) {
-    redirect('/login');
+    notFound();
   }
 
   return (
@@ -53,7 +53,7 @@ export default async function ForumDetailsPage({ params }) {
           <div className="flex items-center gap-3 mt-4 bg-slate-50 dark:bg-slate-950 border border-slate-200/60 dark:border-slate-800/80 p-3 rounded-2xl">
             <div className="relative w-8 h-8 rounded-full overflow-hidden bg-slate-200 border border-orange-500/20">
               <Image
-                src={post.authorImage || 'https://unsplash.com'}
+                src={post.authorImage || '/images/placeholder.png'}
                 alt=""
                 fill
                 className="object-cover"
@@ -72,10 +72,10 @@ export default async function ForumDetailsPage({ params }) {
 
         <div className="w-full aspect-16/10 sm:aspect-video rounded-3xl overflow-hidden relative bg-slate-100 dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 shadow-md mb-8">
           <Image
-            src={post.image || 'https://images.unsplash.com'}
+            src={post.image || '/images/placeholder.png'}
             alt={post.title}
             fill
-            sizes="(max-w-3xl) 100vw"
+            sizes="(max-width: 768px) 100vw, 768px"
             className="object-cover"
             priority
           />
@@ -86,6 +86,7 @@ export default async function ForumDetailsPage({ params }) {
             {post.description}
           </p>
         </div>
+
         <div className="mt-6">
           <LikeDislikeButtons
             postId={post._id}
