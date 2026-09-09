@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import { authClient } from '@/lib/auth-client';
@@ -15,6 +15,7 @@ const stripePromise = loadStripe(
 export default function PaymentPage() {
   const searchParams = useSearchParams();
   const classId = searchParams.get('classId');
+  const router = useRouter();
   const [classData, setClassData] = useState(null);
   const [fetching, setFetching] = useState(true);
   const { data: session, isPending } = authClient.useSession();
@@ -33,12 +34,17 @@ export default function PaymentPage() {
     }
   }, [classId]);
 
+  useEffect(() => {
+    if (!isPending && !session?.user) {
+      router.push('/login');
+    }
+  }, [isPending, session, router]);
+
   if (isPending || fetching) {
     return <Loading />;
   }
 
   if (!session?.user) {
-    window.location.replace('/login');
     return null;
   }
 
