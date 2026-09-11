@@ -35,6 +35,12 @@ const ICON_MAP = {
   creditCard: CreditCard,
 };
 
+const OVERVIEW_PATHS = [
+  '/dashboard/user',
+  '/dashboard/trainer',
+  '/dashboard/admin',
+];
+
 export default function DashboardSidebarClient({ navItems }) {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
@@ -42,7 +48,10 @@ export default function DashboardSidebarClient({ navItems }) {
   const navContent = (
     <nav className="flex flex-col gap-1">
       {navItems.map(item => {
-        const isActive = pathname === item.href;
+        const isOverview = OVERVIEW_PATHS.includes(item.href);
+        const isActive =
+          pathname === item.href ||
+          (!isOverview && pathname.startsWith(item.href + '/'));
         const Icon = ICON_MAP[item.icon];
         return (
           <Link
