@@ -49,9 +49,10 @@ export default function LatestForum() {
                     <div className="group rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 overflow-hidden hover:border-orange-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-orange-500/5 cursor-pointer h-full">
                       <div className="relative w-full h-40 overflow-hidden">
                         <Image
-                          src={post.image || 'https://images.unsplash.com'}
+                          src={post.image || '/images/placeholder.png'}
                           alt={post.title}
                           fill
+                          priority={index === 0}
                           className="object-cover group-hover:scale-105 transition-transform duration-500"
                         />
                       </div>
@@ -66,8 +67,7 @@ export default function LatestForum() {
                           <div className="relative w-7 h-7 rounded-full overflow-hidden bg-slate-200 shrink-0">
                             <Image
                               src={
-                                post.authorImage ||
-                                'https://images.unsplash.com'
+                                post.authorImage || '/images/placeholder.png'
                               }
                               alt=""
                               fill
