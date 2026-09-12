@@ -46,9 +46,10 @@ export default function FeaturedClasses() {
                     <div className="group rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 overflow-hidden hover:border-orange-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-orange-500/5 cursor-pointer">
                       <div className="relative w-full h-48 overflow-hidden">
                         <Image
-                          src={cls.image || 'https://images.unsplash.com'}
+                          src={cls.image || '/images/placeholder.png'}
                           alt={cls.className}
                           fill
+                          priority={index === 0}
                           className="object-cover group-hover:scale-105 transition-transform duration-500"
                         />
                       </div>
