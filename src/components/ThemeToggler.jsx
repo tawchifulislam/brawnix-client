@@ -1,12 +1,24 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
 import { motion } from 'framer-motion';
 import { Sun, Moon } from '@gravity-ui/icons';
 
 const ThemeToggler = () => {
   const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <div className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800" />
+    );
+  }
 
   return (
     <motion.button
