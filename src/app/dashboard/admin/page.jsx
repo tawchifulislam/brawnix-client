@@ -21,8 +21,16 @@ export default function AdminOverviewPage() {
       credentials: 'include',
     })
       .then(res => res.json())
-      .then(data => setStats(data))
-      .catch(err => console.error(err))
+      .then(data => {
+        if (data && typeof data === 'object') {
+          setStats(data);
+        }
+      })
+      .catch(() => {
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Failed to fetch admin stats');
+        }
+      })
       .finally(() => setLoading(false));
   }, []);
 
