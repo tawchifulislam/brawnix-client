@@ -16,7 +16,11 @@ export function useAdminStats() {
     })
       .then(res => res.json())
       .then(data => setStats(data))
-      .catch(err => console.error(err))
+      .catch(() => {
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Fetch failed');
+        }
+      })
       .finally(() => setLoading(false));
   }, []);
 

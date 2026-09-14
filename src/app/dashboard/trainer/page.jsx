@@ -29,7 +29,11 @@ export default function TrainerOverviewPage() {
         );
         setStudentsCount(totalStudents);
       })
-      .catch(err => console.error(err))
+      .catch(() => {
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Fetch failed');
+        }
+      })
       .finally(() => setLoading(false));
   }, [user]);
 

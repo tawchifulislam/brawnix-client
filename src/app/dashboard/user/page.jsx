@@ -34,7 +34,11 @@ export default function UserOverviewPage() {
         setFavoritesCount(Array.isArray(favorites) ? favorites.length : 0);
         setApplication(app);
       })
-      .catch(err => console.error(err))
+      .catch(() => {
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Fetch failed');
+        }
+      })
       .finally(() => setLoading(false));
   }, [user]);
 

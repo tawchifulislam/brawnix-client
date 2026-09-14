@@ -19,7 +19,11 @@ export function useTrainerClasses(email) {
       .then(data => {
         if (active) setClasses(Array.isArray(data) ? data : []);
       })
-      .catch(err => console.error(err))
+      .catch(() => {
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Fetch failed');
+        }
+      })
       .finally(() => {
         if (active) setLoading(false);
       });
