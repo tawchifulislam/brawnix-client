@@ -16,7 +16,8 @@ export default function BookNowButton({ classData }) {
     let active = true;
 
     if (!user?.email || !classData?._id) {
-      false;
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setChecking(false);
       return;
     }
 
@@ -36,7 +37,7 @@ export default function BookNowButton({ classData }) {
     return () => {
       active = false;
     };
-  }, [user, classData]);
+  }, [user?.email, classData?._id]);
 
   const handleClick = () => {
     if (!user) {
