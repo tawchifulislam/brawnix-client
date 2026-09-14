@@ -117,7 +117,11 @@ export default function AdminStatsChart() {
           },
         ]);
       })
-      .catch(err => console.error(err))
+      .catch(() => {
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Failed to fetch admin stats for chart');
+        }
+      })
       .finally(() => setLoading(false));
   }, []);
 
